@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Routine Machine Round</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="login.css" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com data:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com"
+    />
+  </head>
+  <body>
+    <h1>NYX LLC.</h1>
+    <div class="main">
+      <div class="div">
+        <div
+          id="flashError"
+          style="
+            display: none;
+            color: #ff0000;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+          "
+        ></div>
+
+        <form id="loginForm" autocomplete="on">
+          <label for="text">Enter Username</label>
+          <input
+            id="username"
+            type="text"
+            required
+            placeholder="Username"
+            name="username"
+          />
+
+          <label for="password">Enter Password</label>
+          <input
+            id="password"
+            type="password"
+            required
+            placeholder="Password"
+            name="password"
+          />
+
+          <button id="btnLogin" type="submit" name="submit">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const SESSION_KEY = "nyxllc_session_v1";
+        const VALID_USERNAME = "abdullah911";
+        const VALID_PASSWORD = "abd911";
+
+        const form = document.getElementById("loginForm");
+        const flash = document.getElementById("flashError");
+        const btn = document.getElementById("btnLogin");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+
+        function showError(msg) {
+          if (!flash) {
+            alert(msg);
+            return;
+          }
+          flash.textContent = msg;
+          flash.style.display = "block";
+        }
+
+        function clearError() {
+          if (!flash) return;
+          flash.textContent = "";
+          flash.style.display = "none";
+        }
+
+        // Hardcoded credentials stored in this file
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          clearError();
+          const username = usernameInput.value.trim();
+          const password = passwordInput.value.trim();
+          if (!username || !password) {
+            showError("Please enter both username and password.");
+            return;
+          }
+          btn.disabled = true;
+          try {
+            const isValid =
+              username === VALID_USERNAME && password === VALID_PASSWORD;
+            if (isValid) {
+              try {
+                localStorage.setItem(
+                  SESSION_KEY,
+                  JSON.stringify({ username, time: Date.now() })
+                );
+              } catch {}
+              window.location.href = "dashboard.html";
+            } else {
+              showError("Incorrect username or password. Please try again.");
+            }
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
